@@ -30,7 +30,12 @@ Il routing dei pacchetti dati, calcolato dinamicamente in base alle coordinate s
 La creazione di path stabili avviene su multipli livelli: un nodo può comunicare agevolmente con i suoi nodi di vicinato della stessa dimensione, ma per far cambiare dimensione ad un pacchetto dati può avere solo due nodi di riferimento: un nodo superiore e un nodo inferiore. In casi normali, un pacchetto può essere direzionato unicamente verso la dimensione del destinatario. Però un algoritmo di shuffling può far cambiare liberamente la dimensione di un pacchetto al fine di generare in tempo reale una route imprevedibile. 
 
 ### Quantizzazione coordinate
-Se un pacchetto dovesse per forza 
+Se un pacchetto dovesse per forza passare per ogni relay frapposto fra due nodi, la latenza nella comunicazione aumenterebbe notevolmente con l'aumentare della distanza. Invece si dividono i nodi in regioni, relativi alla distanza media fra i nodi della rete moltiplicata per 4 (prende il nome di Reference Region Size): si prende appunto la latitudine e la longitudine del nodo e la si divide per RRS e si arrotonda il risultato. Questa operazione si esegue radoppiando RRS fino ad ottenere una scala con solo una regione, chiamata **Full Scale**. 
+
+Quindi ogni nodo, oltre ad avere nella propria routes table i suoi nodi vicini, ha anche un insieme di nodi di riferimento per ognuna delle 8 regioni confinanti, eccetto per quelle prive di nodi, per ogni scala fino alla full scale. 
+
+### Coordinate e relativismo
+Rappresentare con precisione con coordinate spaziali la mappa dei nodi può apparire confusionario se non in alcuni casi impossibile da definire con certezza. C'è da dire che in realtà non c'è bisogno che questa rappresentazione sia ineccepibile, per quanto l'altitudine funzionando da dimensione richiede maggiore delicatezza nella gestione, rimane strettamente rappresentativa ed arbitraria: è un sistema per creare punti di riferimento stabili su basi però indicative. Si può definire la rappresentazione spaziale della rete TSNL come la media dei punti di vista dei vari nodi che la compongono.
 
 **todo: Approfondisci il funzionamento di route tables e alias resolving**
 

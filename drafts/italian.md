@@ -48,3 +48,4 @@ La libreria GUN ([https://gun.eco/docs/](https://gun.eco/docs/)) per Javascript 
 
 ## Riflessioni
 - Il protocollo TSNL deve cercare di essere il più portabile e leggero possibile. Per la sua implementazione ho scelto NodeJS, cercando di sfrutta il più possibile codice interpretato e pseudo-interpretato dal runtime di node. Di conseguenza nell'implementazione base del protocollo bisogna evitare l'uso obbligatorio di programmi esterni come IPFS.
+- Si potrebbe ridurre anche la dimensione del checksum a 48 bit per consentire un buon rapporto definizione/peso.

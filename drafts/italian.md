@@ -44,6 +44,18 @@ Il TNSL offre anche un sistema di checksum parallelo che permette di inviare pac
 
 Per quanto un sistema di checksum possa essere problematico per connessioni di dati in tempo reale che richiedono un'alta ampiezza di banda, al contempo si possono implementare sistemi per la priorità del checksum, come per esempio permettendo la consegna al destinatario dei dati prima ancora di ricevere il checksum, trattanendo unicamente il checksum dei dati ricevuti così da verificarlo appena possibile. In caso di mancata ricezione, il nodo destinatario può richiedere il checksum, in caso di verifica fallita il nodo può interrompere la connessione in corso e propagare un **sub-ICMP** per allarmare i nodi coinvolti di un potenziale *man-in-the-middle*.
 
+## Ruoli e attributi
+Ogni nodo può avere particolari ruoli e attributi all'interno della rete in base alla loro velocità, latenza, stabilità, tempo online e reputazione. Questi attributi danno una particolare priorità e responsabilità/potere all'interno di una regione se non dell'intera rete. Per esempio sono essenziali una serie di nodi in grado di permettere l'inizializzazione di un nodo alla rete sia agendo come punto di riferimento con il suo indirizzo IP, sia gestendo e fornendo informazioni essenziali al nodo per localizzarsi nella giusta regione, ottenendo le migliori coordinate e di conseguenza vicini.
+
+Via andando, i ruoli possono portare un nodo a specializzarsi in funzioni come la gestione del traffico del checksum, che richiede bassa latenza e buona capacità di calcolo del processore, come altri ruoli possono trarre vantaggio da una buona capacità di archiviazione a propria disposizione.
+
+## Esempi e flussi
+Esempi pratici e rappresentazione del funzionamento delle operazioni nella rete può semplificare notevolmente sia la spiegazione che la compresione del funzionamento del TSNL.
+
+### Connessione di un nodo alla rete
+#### **1. Recupero degli indirizzi di riferimento**
+Con l'ausilio di un database P2P, prendendo il protocollo GUN come riferimento, si legge la tabella contente 
+
 # Discussione
 
 ## Precisazioni

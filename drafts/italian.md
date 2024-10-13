@@ -61,11 +61,16 @@ Con l'ausilio di un database P2P, prendendo il protocollo GUN come riferimento, 
 #### **2. Connessione al master node e ricerca regione**
 Il master node fornisce almeno un paio di indirizzi IP di nodi per ogni regione a livello superiore, il client calcola la regione con minore latenza e richiede altri nodi di riferimento per ognuna delle 9 regioni della corrente regione, ripetendo l'operazione finchè non raggiunge la regione di scala 1:1. 
 
-### **3. Calcolo nodi vicini**
-Su selezione casuale per ogni radiante, con l'aiuto dei nodi della stessa regione, ottiene dei nodi di riferenza per ognuna delle 4 direzioni possibili. Una maggiore spartizione in radianti delle direzioni di riferimento potrebbero paradossalmente creare delle route riconoscibili in base all'indirizzo destinatario. La stessa operazione va fatta per ogni regione superiore e per la dimensione superiore ed inferiore.
+#### **3. Calcolo nodi vicini**
+Su selezione casuale per ogni radiante, con l'aiuto dei nodi della stessa regione, ottiene dei nodi di referenza per ognuna delle 4 direzioni possibili. Una maggiore spartizione in radianti delle direzioni di riferimento potrebbero paradossalmente creare delle route riconoscibili in base all'indirizzo destinatario. La stessa operazione va fatta per ogni regione superiore e per la dimensione superiore ed inferiore.
 
-### **4. Consolidazione peers**
+#### **4. Consolidazione peers**
 Una volta effettuato l'handshake con i vicini si può consolidare la propria posizione come nodo nella rete così da poter usato per il routing dei pacchetti. Nel caso il nodo si frapponesse fra due nodi nella stessa regione, questi sostituirebbero il vicino con il nuovo nodo.
+
+#### E se non ci fosse alcun master node?
+Come si comporta il primo nodo in assoluto a connettersi alla rete? In questo caso si da' per assunto che le sue coordinate corrispondano al punto zero. Il nodo ricoprerebbe in automatico il ruolo di master node aggiungendo il suo indirizzo IP alla tabella GUN. 
+
+Va considerato il caso particolare in cui, per qualsiasi ragione, il nodo si convincesse erroneamente di essere l'unico nodo disponibile. In quel caso è necessario implementare algoritmi di controllo, affinchè il nodo "si disconnetta" e riconnetta alla rete reale. In alcuni casi è persino plausibile la possibilità che si formino due reti separate composte da indirizzi IP che non possono comunicare fra loro, per qualsiasi ragione come a causa di un blocco regionale degli IP. In tal caso bisogna accettare e gestire la co-esistenza delle due reti e preferibilmente implementare l'uso di tunnel. Va valutato anche il caso in cui per qualsiasi ragione il blocco si risolvesse, se riconnettere tutti i nodi della rete più piccola alla rete maggiore oppure implementare un sistema di propagazione dell'offset (che al contempo potrebbe esporre una rete ad un attacco auto distruttivo), così da collegare in maniera trasparente le due reti. L'effettiva complessità nella gestione di questa condizione dipenderà anche dall'implementazione finale del protocollo.
 
 # Discussione
 

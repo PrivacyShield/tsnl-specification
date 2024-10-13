@@ -37,6 +37,13 @@ Quindi ogni nodo, oltre ad avere nella propria routes table i suoi nodi vicini, 
 ### Coordinate e relativismo
 Rappresentare con precisione con coordinate spaziali la mappa dei nodi può apparire confusionario se non in alcuni casi impossibile da definire con certezza. C'è da dire che in realtà non c'è bisogno che questa rappresentazione sia ineccepibile, per quanto l'altitudine funzionando da dimensione richiede maggiore delicatezza nella gestione, rimane strettamente rappresentativa ed arbitraria: è un sistema per creare punti di riferimento stabili su basi però indicative. Si può definire la rappresentazione spaziale della rete TSNL come la media dei punti di vista dei vari nodi che la compongono.
 
+### Altitudini e dimensioni
+Le altitudini rappresentano le dimensioni. Ma cosa porta un dispositivo ad avere determinate altitudini? Questo succede quando la triangolazione lo colloca in una determinata longitudine e altitudine ma, relativamente agli altri nodi vicini, ha una latenza maggiore. Altri nodi apparterranno alla stessa latitudine se hanno lo stesso gap di latenza senza averlo con i nodi della stessa altitudine.
+
+Però, per quanto la dimensione sia direttamente attribuibile all'altitudine, la sensibilità a questa e la sua precisione è scelto in rapporto agli altri nodi così da ottenere il rapporto migliore tra velocità e ridondanza. 
+
+Un esempio che può rendere evidente il concetto di altitudine e dimensione può essere un dispositivo connesso ad internet usando la connessione mobile rispetto ad uno connesso tramite WAN Starlink dove, grazie alla comunicazione diretta fra i vari satelliti della rete, la comunicazione con altri dispositivi connessi via satellite anche se dall'altro capo del mondo è decisamente più rapida.
+
 **todo: Approfondisci il funzionamento di route tables e alias resolving**
 
 ## Checksum
@@ -78,10 +85,23 @@ Va considerato il caso particolare in cui, per qualsiasi ragione, il nodo si con
 - Il protocollo, specie nelle fasi iniziali, può apparire confusionario ed incerto. C'è da precisare che molte definizioni verrano chiarite durante l'implementazione pratica del protocollo.
 - È importante integrare un sistema per la verifica dell'integrità sia degli algoritmi di shuffling che per il programma stesso, che sia impacchettato o come codice sorgente Javascript.
 
-## Librerie e protocolli di terze parti
+## Tecnologie esterne
 
 ### GUN (JS - NPM)
 La libreria GUN ([https://gun.eco/docs/](https://gun.eco/docs/)) per Javascript disponibile su NPM è un punto di riferimento molto valido per la creazione e gestione di database P2P (hash table). Fornisce anche un sistema di autenticazione degli utenti. È una soluzione eccellente per la creazione di punti di riferimento decentralizzati e indipendenti dal progetto Privacy Shield, permettendo una separazione dei compiti che garantisce una migliore resistenza alla censura.
+
+### QUIC
+QUIC è un transportation layer alternativo a TCP, volto a renderlo obsoleto. [https://en.wikipedia.org/wiki/QUIC](https://en.wikipedia.org/wiki/QUIC)
+
+### ICE (NAT management)
+[https://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment](https://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment)
+
+Interactive Connectivity Establishment (ICE) is a technique used in computer networking to find ways for two computers to talk to each other as directly as possible in peer-to-peer networking.
+
+Usato per ottenere la via di contatto più diretta possibile fra due indirizzi IP. 
+
+## Hardware
+Data la sua portabilità, potrebbe essere un notevole punto forza fornire una distribuzione Linux per **Raspberry PI** con i protocolli Privacy Shield, in versione server con interfaccia web UI e in versione **media center** collegandolo ad un televisore. Il costo dei Raspberry PI 4 (ormai obsoleti) partono da 30 euro, rendendolo un dispositivo competitivo, da porre come dispositivo DMZ in una connessione ad internet.
 
 ## Riflessioni
 - Il protocollo TSNL deve cercare di essere il più portabile e leggero possibile. Per la sua implementazione ho scelto NodeJS, cercando di sfrutta il più possibile codice interpretato e pseudo-interpretato dal runtime di node. Di conseguenza nell'implementazione base del protocollo bisogna evitare l'uso obbligatorio di programmi esterni come IPFS.

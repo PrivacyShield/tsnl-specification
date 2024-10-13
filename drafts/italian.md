@@ -56,6 +56,9 @@ Ogni nodo può avere particolari ruoli e attributi all'interno della rete in bas
 
 Via andando, i ruoli possono portare un nodo a specializzarsi in funzioni come la gestione del traffico del checksum, che richiede bassa latenza e buona capacità di calcolo del processore, come altri ruoli possono trarre vantaggio da una buona capacità di archiviazione a propria disposizione.
 
+## Distributed Hash Table
+Ogni nodo della rete, seppur senza richiedere particolari spazio di archiviazione, avrà la responsabilità di gestire in maniera casuale e ridondante una porzione dati delle tabelle necessarie per l'accesso rapido ad informazioni essenziali, come la risoluzione degli indirizzi alias.
+
 ## Esempi e flussi
 Esempi pratici e rappresentazione del funzionamento delle operazioni nella rete può semplificare notevolmente sia la spiegazione che la compresione del funzionamento del TSNL.
 
@@ -106,3 +109,4 @@ Data la sua portabilità, potrebbe essere un notevole punto forza fornire una di
 ## Riflessioni
 - Il protocollo TSNL deve cercare di essere il più portabile e leggero possibile. Per la sua implementazione ho scelto NodeJS, cercando di sfrutta il più possibile codice interpretato e pseudo-interpretato dal runtime di node. Di conseguenza nell'implementazione base del protocollo bisogna evitare l'uso obbligatorio di programmi esterni come IPFS.
 - Si potrebbe ridurre anche la dimensione del checksum a 48 bit per consentire un buon rapporto definizione/peso.
+- Per come si sta strutturando il protocollo, questo può essere riutilizzato per la creazione di reti di computazione distribuita.

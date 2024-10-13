@@ -14,9 +14,9 @@ L'acronimo di TSNL inizia con le parole **Time-based Spatial** *Network Layers* 
 - **Pacchetti dati**: indica una porzione di dati di uno stream, che può corrispondere alla dimensione di un pacchetto TCP/IP o anche di più (come 1024, 2048 etc bytes), lasciando implicita la sua frammentazione.
 
 ## Crittografia
-Esistono due livelli di crittografia: Point to Point e di routing, che usando entrambe in combinazione sia chiavi asimettriche che simmetriche. La prima serve per permettere al destinatario di verificare l'autenticità del messaggio ed impedire di far vedere il suo contenuto ai nodi di routing, mentre la seconda serve per rendere irriconoscibile la direzione di reindirizzamento di un pacchetto (o un insieme di pacchetti) da un relay. Al contempo il TSNL deve offrire un sistema di aggiornamento costante delle chiavi tra nodi, usando anche nodi intermediari come "testimoni e garanti", per impedire la decrittazione per forza bruta delle connessioni.
+Esistono due livelli di crittografia: Point to Point e di routing, che usando in combinazione sia chiavi asimettriche che simmetriche. La prima serve per permettere al destinatario di verificare l'autenticità del messaggio ed impedire di rilevare il suo contenuto ai nodi di routing, mentre la seconda serve per rendere irriconoscibile la direzione di reindirizzamento di un pacchetto (o un insieme di pacchetti) da un relay. Al contempo TSNL deve offrire un sistema di aggiornamento costante delle chiavi tra nodi, usando anche nodi intermediari come "testimoni e garanti", per impedire la decrittazione per forza bruta delle connessioni.
 
-Al contempo, per quanto questo sia un sistema di crittografia essenziale, non è sufficiente per consentire un data shuffling efficace. Quindi a questo si aggiungo gli **algoritmi di shuffling**: questi sono degli insiemi di algoritmi che si aggiungono alla crittografia base sia in maniera arbitraria che casuale. Quindi si può trarre vantaggio di linguaggi di scripting standard come l'ECMA script (Javascript) per definire questi algoritmi da applicare dinamicamente per ogni connessione e flusso dati. 
+Per quanto questo sia un sistema di crittografia essenziale, non è sufficiente per consentire un data shuffling efficace. Quindi a questo si aggiungo gli **algoritmi di shuffling**: questi sono degli insiemi di algoritmi che si aggiungono alla crittografia base sia in maniera arbitraria che casuale. Quindi si può trarre vantaggio di linguaggi di scripting standard come l'ECMA script (Javascript) per definire questi algoritmi da applicare dinamicamente per ogni connessione e flusso dati. 
 
 Un esempio di algoritmo di shuffling può riguardare l'accumulare una serie di pacchetti all'interno dello stesso stream dati, dividerli in una serie di blocchi di cui scambiare l'ordine in base a punti di riferimento (seeds) accordati tra i nodi.
 
@@ -30,7 +30,7 @@ Il routing dei pacchetti dati, calcolato dinamicamente in base alle coordinate s
 La creazione di path stabili avviene su multipli livelli: un nodo può comunicare agevolmente con i suoi nodi di vicinato della stessa dimensione, ma per far cambiare dimensione ad un pacchetto dati può avere solo due nodi di riferimento: un nodo superiore e un nodo inferiore. In casi normali, un pacchetto può essere direzionato unicamente verso la dimensione del destinatario. Però un algoritmo di shuffling può far cambiare liberamente la dimensione di un pacchetto al fine di generare in tempo reale una route imprevedibile. 
 
 ### Quantizzazione coordinate
-Se un pacchetto dovesse per forza passare per ogni relay frapposto fra due nodi, la latenza nella comunicazione aumenterebbe notevolmente con l'aumentare della distanza. Invece si dividono i nodi in regioni, relativi alla distanza media fra i nodi della rete moltiplicata per 4 (prende il nome di Reference Region Size): si prende appunto la latitudine e la longitudine del nodo e la si divide per RRS e si arrotonda il risultato. Questa operazione si esegue radoppiando RRS fino ad ottenere una scala con solo una regione, chiamata **Full Scale**. 
+Se un pacchetto dovesse per forza passare per ogni relay frapposto fra due nodi, la latenza nella comunicazione aumenterebbe notevolmente con l'aumentare della distanza. Invece si dividono i nodi in regioni, relativi alla distanza media fra i nodi della rete moltiplicata per 4 (prende il nome di **Reference Region Size**): si prende appunto la latitudine e la longitudine del nodo e la si divide per RRS e si arrotonda il risultato. Questa operazione si esegue radoppiando RRS fino ad ottenere una scala con solo una regione, chiamata **Full Scale**. 
 
 Quindi ogni nodo, oltre ad avere nella propria routes table i suoi nodi vicini, ha anche un insieme di nodi di riferimento per ognuna delle 8 regioni confinanti, eccetto per quelle prive di nodi, per ogni scala fino alla full scale. 
 
@@ -45,6 +45,9 @@ Il TNSL offre anche un sistema di checksum parallelo che permette di inviare pac
 Per quanto un sistema di checksum possa essere problematico per connessioni di dati in tempo reale che richiedono un'alta ampiezza di banda, al contempo si possono implementare sistemi per la priorità del checksum, come per esempio permettendo la consegna al destinatario dei dati prima ancora di ricevere il checksum, trattanendo unicamente il checksum dei dati ricevuti così da verificarlo appena possibile. In caso di mancata ricezione, il nodo destinatario può richiedere il checksum, in caso di verifica fallita il nodo può interrompere la connessione in corso e propagare un **sub-ICMP** per allarmare i nodi coinvolti di un potenziale *man-in-the-middle*.
 
 # Discussione
+
+## Precisazioni
+- Il protocollo, specie nelle fasi iniziali, può apparire confusionario ed incerto. C'è da precisare che molte definizioni verrano chiarite durante l'implementazione pratica del protocollo.
 
 ## Librerie e protocolli di terze parti
 

@@ -53,13 +53,25 @@ Via andando, i ruoli possono portare un nodo a specializzarsi in funzioni come l
 Esempi pratici e rappresentazione del funzionamento delle operazioni nella rete può semplificare notevolmente sia la spiegazione che la compresione del funzionamento del TSNL.
 
 ### Connessione di un nodo alla rete
+I primi 2 punti possono essere bypassati nel caso non fosse la prima connessione del nodo alla rete con lo stesso ISP nella stessa regione.
+
 #### **1. Recupero degli indirizzi di riferimento**
-Con l'ausilio di un database P2P, prendendo il protocollo GUN come riferimento, si legge la tabella contente 
+Con l'ausilio di un database P2P, prendendo il protocollo GUN come riferimento, si legge la tabella contente gli indirizzi IP dei server master, ovvero al livello superiore.
+
+#### **2. Connessione al master node e ricerca regione**
+Il master node fornisce almeno un paio di indirizzi IP di nodi per ogni regione a livello superiore, il client calcola la regione con minore latenza e richiede altri nodi di riferimento per ognuna delle 9 regioni della corrente regione, ripetendo l'operazione finchè non raggiunge la regione di scala 1:1. 
+
+### **3. Calcolo nodi vicini**
+Su selezione casuale per ogni radiante, con l'aiuto dei nodi della stessa regione, ottiene dei nodi di riferenza per ognuna delle 4 direzioni possibili. Una maggiore spartizione in radianti delle direzioni di riferimento potrebbero paradossalmente creare delle route riconoscibili in base all'indirizzo destinatario. La stessa operazione va fatta per ogni regione superiore e per la dimensione superiore ed inferiore.
+
+### **4. Consolidazione peers**
+Una volta effettuato l'handshake con i vicini si può consolidare la propria posizione come nodo nella rete così da poter usato per il routing dei pacchetti. Nel caso il nodo si frapponesse fra due nodi nella stessa regione, questi sostituirebbero il vicino con il nuovo nodo.
 
 # Discussione
 
 ## Precisazioni
 - Il protocollo, specie nelle fasi iniziali, può apparire confusionario ed incerto. C'è da precisare che molte definizioni verrano chiarite durante l'implementazione pratica del protocollo.
+- È importante integrare un sistema per la verifica dell'integrità sia degli algoritmi di shuffling che per il programma stesso, che sia impacchettato o come codice sorgente Javascript.
 
 ## Librerie e protocolli di terze parti
 

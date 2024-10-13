@@ -17,6 +17,19 @@ Al contempo, per quanto questo sia un sistema di crittografia essenziale, non è
 
 Un esempio di algoritmo di shuffling può riguardare l'accumulare una serie di pacchetti all'interno dello stesso stream dati, dividerli in una serie di blocchi di cui scambiare l'ordine in base a punti di riferimento (seeds) accordati tra i nodi.
 
+Oppure un sistema di "**dummy packets**", così da rendere difficile ricostruire l'effettiva dimensione dei dati in trasmissione sia fuorviare un osservatore da quali dati in trasmissione siano consistenti.
+
 Un altro esempio può riguardato l'applicazione casuale di un cambio di route, che in ogni caso è implementato alla base del protocollo, come spiegato nel paragrafo successivo.
 
 ## Routing
+Il routing, calcolato dinamicamente in base alle coordinate spaziali dei due indirizzi in connessione, deve offrire anche una particolare diversificazione del percorso per ogni insieme di pacchetti in uscita, così sia da rendere difficile ricostruire sia la serie di connessioni in corso che l'intero stream di dati di una connessione. Il routing deve saper indirizzare con rapidità anche pacchetti inviati una tantum che gestire e approfondire la stabilità e diversificazione di connessioni stabili. In quest'ultimo caso i nodi in comunicazione devono in parallelo studiare e costruire una serie di tracciati stabili da prendere come punti di riferimento affidabili.
+
+**todo: Approfondisci il funzionamento di route tables e alias resolving**
+
+## Librerie e protocolli di terze parti
+
+### GUN (JS - NPM)
+La libreria GUN ([https://gun.eco/docs/](https://gun.eco/docs/)) per Javascript disponibile su NPM è un punto di riferimento molto valido per la creazione e gestione di database P2P (hash table). Fornisce anche un sistema di autenticazione degli utenti. È una soluzione eccellente per la creazione di punti di riferimento decentralizzati e indipendenti dal progetto Privacy Shield, permettendo una separazione dei compiti che garantisce una migliore resistenza alla censura.
+
+## Riflessioni
+- Il protocollo TSNL deve cercare di essere il più portabile e leggero possibile. Per la sua implementazione ho scelto NodeJS, cercando di sfrutta il più possibile codice interpretato e pseudo-interpretato dal runtime di node. Di conseguenza nell'implementazione base del protocollo bisogna evitare l'uso obbligatorio di programmi esterni come IPFS.

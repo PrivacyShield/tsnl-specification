@@ -56,6 +56,17 @@ Ogni nodo può avere particolari ruoli e attributi all'interno della rete in bas
 
 Via andando, i ruoli possono portare un nodo a specializzarsi in funzioni come la gestione del traffico del checksum, che richiede bassa latenza e buona capacità di calcolo del processore, come altri ruoli possono trarre vantaggio da una buona capacità di archiviazione a propria disposizione.
 
+## Dimensioni
+La definzione delle dimensioni per mezzo dell'altitudine di un nodo ha il fine di localizzare in maniera coerente un connessione ad internet che pare più o meno veloce rispetto alla media senza però "rompere" la rappresentazione geografica fatti dei vari nodi. Ponendo quindi un nodo più in alto o più in basso, si può permettere di mantenere la stessa longitudine e latitudine. 
+
+La definizione a "dimensione" cerca di trarre vantaggio dalla possibilità che i nodi della stessa dimensione possano comunicare fra di loro in modo più rapido, rendendo il loro utilizzo vantaggioso per le comunicazioni sulla lunga distanza. Al contempo, però, etichettare a tutti i costi ogni connessione e irrigidire il cambio di dimensioni da parte di una path può creare un ambiente favorevole all'abbuso di determinate path e dimensioni, rendendo più facile intercettare e controllare le connessioni in corso da parte di un malintenzionato.
+
+Questo mi porta ad approfondire la questione per trarne dei princìpi fondamentali sulla definizione ad uso delle dimensioni:
+
+- L'altitudine di un nodo va ad incidere sulla sua conseguenza dimensione <ins>in questo caso</ins>, perchè è utile al fine per cui il protocollo vuole essere utilizzato.
+- All'interno della stessa rete, quindi, possono essere definiti più tipi di dimensioni a cui un nodo può appartenere (che si lega anche strettamente agli attributi di un nodo definiti), come per esempio la capienza della memoria a sua disposizione, i tempi di elaboramento di un'operazione, l'uptime etc.
+- In precedenza è stata data una regola stringente sul come un pacchetto dati possa cambiare dimensione durante la sua trasmissione. Però permettere in maniera così stringente la trasmissione su una dimensione differente può creare delle lacune nel sistema di data shuffling. Quindi queste regole stringenti andrebbero tenute solo per le situazioni di effettivo vantaggio con una maggiore priorità rispetto ad altri scambi di dati, che però devono avvenire ugualmente come su un qualsiasi nodo della rete, in base all'effettiva capacità di trasmissione della connessione del nodo.
+
 ## Distributed Hash Table
 Ogni nodo della rete, seppur senza richiedere particolari spazio di archiviazione, avrà la responsabilità di gestire in maniera casuale e ridondante una porzione dati delle tabelle necessarie per l'accesso rapido ad informazioni essenziali, come la risoluzione degli indirizzi alias.
 

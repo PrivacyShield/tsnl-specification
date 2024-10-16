@@ -10,6 +10,8 @@ Si può riassumere il TSNL come un abile mazziere in grado di mescolare le carte
 ## Concetti base
 L'acronimo di TSNL inizia con le parole **Time-based Spatial** *Network Layers* proprio per il suo modo di localizzare spazialmente gli indirizzi nella mappa di routing, mentre il plurale di layer è dovuta alla natura multi dimensionale della rete. La TSNL non ha sotto reti e il raggruppamento degli indirizzi non avviene associando l'IP del nodo al suo blocco IP, ma bensì creando un punto di riferimento pseudo-spaziale: ogni indirizzo alias (rappresenta da intero da 48 bit generato casualmente) viene associato a delle coordinate x, y e z (che rappresentano concettualmente longitudine, latitudine e altitudine). Però queste coordinate non rappresentano realmente la posizione geografica del nodo, pur apparentendo ad un sistema di coordinate sferiche, ma bensì sono il risultato approssimativo della triangolazione tra punti di riferimento selezionato a parità d'altitudine, ovvero altri nodi nella stessa dimensione, dove la triangolazione viene calcolata in base ai tempi di ping tra i nodi, time-based per l'appunto (i tempi di ping potrebbero essere arbitrariamente condizionati da altri fattori, come il route trace o forme di sviamento casuale). Come vagamente anticipato, l'altitudine è un modo per rappresentare la dimensione su cui il nodo opera, in modo che sia matematicamente coerente da gestire per il calcolo delle route migliori, e le dimensioni hanno il fine di isolare su più layer i nodi così di limitare ulteriormente la visione generale dei nodi circostanti. 
 
+Le coordinate è composta da 3 numeri in floating point. A meno che non ci siano soluzioni più efficienti per affrontare la cosa, per il momento trovo inevitabile che le coordinate di un nodo richiedano 12 bytes di spazio, il doppio dell'indirizzo alias. 
+
 ### Terminologie
 - **Pacchetti dati**: indica una porzione di dati di uno stream, che può corrispondere alla dimensione di un pacchetto TCP/IP o anche di più (come 1024, 2048 etc bytes), lasciando implicita la sua frammentazione.
 
@@ -100,8 +102,8 @@ Come si comporta il primo nodo in assoluto a connettersi alla rete? In questo ca
 
 Va considerato il caso particolare in cui, per qualsiasi ragione, il nodo si convincesse erroneamente di essere l'unico nodo disponibile. In quel caso è necessario implementare algoritmi di controllo, affinchè il nodo "si disconnetta" e riconnetta alla rete reale. In alcuni casi è persino plausibile la possibilità che si formino due reti separate composte da indirizzi IP che non possono comunicare fra loro, per qualsiasi ragione come a causa di un blocco regionale degli IP. In tal caso bisogna accettare e gestire la co-esistenza delle due reti e preferibilmente implementare l'uso di tunnel. Va valutato anche il caso in cui per qualsiasi ragione il blocco si risolvesse, se riconnettere tutti i nodi della rete più piccola alla rete maggiore oppure implementare un sistema di propagazione dell'offset (che al contempo potrebbe esporre una rete ad un attacco auto distruttivo), così da collegare in maniera trasparente le due reti. L'effettiva complessità nella gestione di questa condizione dipenderà anche dall'implementazione finale del protocollo.
 
-### B. Invito di un pacchetto dati ad un altro nodo
-Sono stanco, come sempre
+### B. Invio di un pacchetto dati ad un altro nodo
+Ogni nodo ha una relativamente breve Coordinates Tables contenente le coordinate dei suoi vicini e i loro IP reali. Se a questo punto del docuemnto non è già stato notare, le coordinate nella tabella sono indicativi nella precisione: quanto basta per far raggiungere il dato a destinazione. Nel caso dei vicini della stessa micro regione le coordinate corrisponderanno effettivamente alle cordinate dei nodi, ma man man che il nodo è distante dal nodo comunicante, tenderà ad avere delle coordinate molto indicative e non precise. 
 
 # Discussione
 

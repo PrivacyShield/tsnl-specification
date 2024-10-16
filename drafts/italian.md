@@ -14,7 +14,7 @@ L'acronimo di TSNL inizia con le parole **Time-based Spatial** *Network Layers* 
 - **Pacchetti dati**: indica una porzione di dati di uno stream, che può corrispondere alla dimensione di un pacchetto TCP/IP o anche di più (come 1024, 2048 etc bytes), lasciando implicita la sua frammentazione.
 
 ## Crittografia
-Esistono due livelli di crittografia: Point to Point e di routing, che usando in combinazione sia chiavi asimettriche che simmetriche. La prima serve per permettere al destinatario di verificare l'autenticità del messaggio ed impedire di rilevare il suo contenuto ai nodi di routing, mentre la seconda serve per rendere irriconoscibile la direzione di reindirizzamento di un pacchetto (o un insieme di pacchetti) da un relay. Al contempo TSNL deve offrire un sistema di aggiornamento costante delle chiavi tra nodi, usando anche nodi intermediari come "testimoni e garanti", per impedire la decrittazione per forza bruta delle connessioni.
+Esistono due livelli di crittografia: Point to Point e di routing, che usando in combinazione sia chiavi asimettriche (**RSA**) che simmetriche (**AES**). La prima serve per permettere al destinatario di verificare l'autenticità del messaggio ed impedire di rilevare il suo contenuto ai nodi di routing, mentre la seconda serve per rendere irriconoscibile la direzione di reindirizzamento di un pacchetto (o un insieme di pacchetti) da un relay. Al contempo TSNL deve offrire un sistema di aggiornamento costante delle chiavi tra nodi, usando anche nodi intermediari come "testimoni e garanti", per impedire la decrittazione per forza bruta delle connessioni.
 
 Per quanto questo sia un sistema di crittografia essenziale, non è sufficiente per consentire un data shuffling efficace. Quindi a questo si aggiungo gli **algoritmi di shuffling**: questi sono degli insiemi di algoritmi che si aggiungono alla crittografia base sia in maniera arbitraria che casuale. Quindi si può trarre vantaggio di linguaggi di scripting standard come l'ECMA script (Javascript) per definire questi algoritmi da applicare dinamicamente per ogni connessione e flusso dati. 
 
@@ -27,7 +27,7 @@ Un altro esempio può riguardato l'applicazione casuale di un cambio di route, c
 ## Routing
 Il routing dei pacchetti dati, calcolato dinamicamente in base alle coordinate spaziali dei due indirizzi in connessione, deve offrire anche una particolare diversificazione del percorso per ogni insieme di pacchetti in uscita, così sia da rendere difficile ricostruire sia la serie di connessioni in corso che l'intero stream di dati di una connessione. Il routing deve saper indirizzare con rapidità anche pacchetti inviati una tantum che gestire e approfondire la stabilità e diversificazione di connessioni stabili. In quest'ultimo caso i nodi in comunicazione devono in parallelo studiare e costruire una serie di tracciati stabili da prendere come punti di riferimento affidabili.
 
-La creazione di path stabili avviene su multipli livelli: un nodo può comunicare agevolmente con i suoi nodi di vicinato della stessa dimensione, ma per far cambiare dimensione ad un pacchetto dati può avere solo due nodi di riferimento: un nodo superiore e un nodo inferiore. In casi normali, un pacchetto può essere direzionato unicamente verso la dimensione del destinatario. Però un algoritmo di shuffling può far cambiare liberamente la dimensione di un pacchetto al fine di generare in tempo reale una route imprevedibile. 
+La creazione di path stabili avviene su multipli livelli: un nodo può comunicare agevolmente con i suoi nodi di vicinato della stessa dimensione, ma per far cambiare dimensione ad un pacchetto dati può avere una serie di nodi di riferimento: una serie di nodi superiori e una inferiore. In casi normali, un pacchetto può essere direzionato unicamente verso la dimensione del destinatario. Però un algoritmo di shuffling può far cambiare liberamente la dimensione di un pacchetto al fine di generare in tempo reale una route imprevedibile. 
 
 ### Quantizzazione coordinate
 Se un pacchetto dovesse per forza passare per ogni relay frapposto fra due nodi, la latenza nella comunicazione aumenterebbe notevolmente con l'aumentare della distanza. Invece si dividono i nodi in regioni, relativi alla distanza media fra i nodi della rete moltiplicata per 4 (prende il nome di **Reference Region Size**): si prende appunto la latitudine e la longitudine del nodo e la si divide per RRS e si arrotonda il risultato. Questa operazione si esegue radoppiando RRS fino ad ottenere una scala con solo una regione, chiamata **Full Scale**. 
@@ -65,7 +65,12 @@ Questo mi porta ad approfondire la questione per trarne dei princìpi fondamenta
 
 - L'altitudine di un nodo va ad incidere sulla sua conseguenza dimensione <ins>in questo caso</ins>, perchè è utile al fine per cui il protocollo vuole essere utilizzato.
 - All'interno della stessa rete, quindi, possono essere definiti più tipi di dimensioni a cui un nodo può appartenere (che si lega anche strettamente agli attributi di un nodo definiti), come per esempio la capienza della memoria a sua disposizione, i tempi di elaboramento di un'operazione, l'uptime etc.
-- In precedenza è stata data una regola stringente sul come un pacchetto dati possa cambiare dimensione durante la sua trasmissione. Però permettere in maniera così stringente la trasmissione su una dimensione differente può creare delle lacune nel sistema di data shuffling. Quindi queste regole stringenti andrebbero tenute solo per le situazioni di effettivo vantaggio con una maggiore priorità rispetto ad altri scambi di dati, che però devono avvenire ugualmente come su un qualsiasi nodo della rete, in base all'effettiva capacità di trasmissione della connessione del nodo.
+- In precedenza è stata data una regola stringente sul come un pacchetto dati possa cambiare dimensione durante la sua trasmissione. Però permettere in maniera così stringente la trasmissione su una dimensione differente può creare delle lacune nel sistema di data shuffling. Quindi queste regole stringenti andrebbero tenute solo per le situazioni di effettivo vantaggio con una maggiore priorità rispetto ad altri scambi di dati, che però devono avvenire ugualmente come su un qualsiasi nodo della rete, in base all'effettiva capacità di trasmissione della connessione del nodo. Ma un abuso di questa strutturazione, anche se in normali casi aumenta l'efficienza nell'uso dei nodi, crea una rete dal comportamento facilmente prevedibile. 
+
+### Come definire le dimensioni "mean"
+Le dimensione "mean" sta per mezzo, ovvero mezzo di comunicazione. Anche se questo non va confuso con l'ISP ma più genericamente con la tecnlogica usata per la trasmissione e il ruoting dei dati, le due cose possono comunque coincidere. 
+Quindi l'altitudine verrà importata al fine di trovare l'altezza tale che al contempo giustifichi al triangolazione longitudinale e latitudinale con gli altri nodi, mentre le creazione di una dimensione *de-facto* avviene quando un nodo con latenze maggiori con i suoi nodi vicini, non risulta avere lo stesso rapporto di latenza con altri nodi della stessa altitudine, formando di fatto una dimensione fra loro.
+Le dimensioni mean non vanno definite in base all'ISP usato o ai ruoter in comune, unicamente in base ai valori delle performance ottenute in fase di inizializzazione e aggiornamento.
 
 ## Distributed Hash Table
 Ogni nodo della rete, seppur senza richiedere particolari spazio di archiviazione, avrà la responsabilità di gestire in maniera casuale e ridondante una porzione dati delle tabelle necessarie per l'accesso rapido ad informazioni essenziali, come la risoluzione degli indirizzi alias.
@@ -73,7 +78,7 @@ Ogni nodo della rete, seppur senza richiedere particolari spazio di archiviazion
 ## Esempi e flussi
 Esempi pratici e rappresentazione del funzionamento delle operazioni nella rete può semplificare notevolmente sia la spiegazione che la compresione del funzionamento del TSNL.
 
-### Connessione di un nodo alla rete
+### A. Connessione di un nodo alla rete
 I primi 2 punti possono essere bypassati nel caso non fosse la prima connessione del nodo alla rete con lo stesso ISP nella stessa regione.
 
 #### **1. Recupero degli indirizzi di riferimento**
@@ -85,6 +90,8 @@ Il master node fornisce almeno un paio di indirizzi IP di nodi per ogni regione 
 #### **3. Calcolo nodi vicini**
 Su selezione casuale per ogni radiante, con l'aiuto dei nodi della stessa regione, ottiene dei nodi di referenza per ognuna delle 4 direzioni possibili. Una maggiore spartizione in radianti delle direzioni di riferimento potrebbero paradossalmente creare delle route riconoscibili in base all'indirizzo destinatario. La stessa operazione va fatta per ogni regione superiore e per la dimensione superiore ed inferiore.
 
+I ping dei nodi vicini va eseguito contempoeanemente, così da autoamticamente escludere le correnti fluttuazioni della rete. Ad questo, può essere aggiunto un superficiale traceroute/tracert per definire con maggiore profondità il tipo di connessione. 
+
 #### **4. Consolidazione peers**
 Una volta effettuato l'handshake con i vicini si può consolidare la propria posizione come nodo nella rete così da poter usato per il routing dei pacchetti. Nel caso il nodo si frapponesse fra due nodi nella stessa regione, questi sostituirebbero il vicino con il nuovo nodo.
 
@@ -92,6 +99,9 @@ Una volta effettuato l'handshake con i vicini si può consolidare la propria pos
 Come si comporta il primo nodo in assoluto a connettersi alla rete? In questo caso si da' per assunto che le sue coordinate corrispondano al punto zero. Il nodo ricoprerebbe in automatico il ruolo di master node aggiungendo il suo indirizzo IP alla tabella GUN. 
 
 Va considerato il caso particolare in cui, per qualsiasi ragione, il nodo si convincesse erroneamente di essere l'unico nodo disponibile. In quel caso è necessario implementare algoritmi di controllo, affinchè il nodo "si disconnetta" e riconnetta alla rete reale. In alcuni casi è persino plausibile la possibilità che si formino due reti separate composte da indirizzi IP che non possono comunicare fra loro, per qualsiasi ragione come a causa di un blocco regionale degli IP. In tal caso bisogna accettare e gestire la co-esistenza delle due reti e preferibilmente implementare l'uso di tunnel. Va valutato anche il caso in cui per qualsiasi ragione il blocco si risolvesse, se riconnettere tutti i nodi della rete più piccola alla rete maggiore oppure implementare un sistema di propagazione dell'offset (che al contempo potrebbe esporre una rete ad un attacco auto distruttivo), così da collegare in maniera trasparente le due reti. L'effettiva complessità nella gestione di questa condizione dipenderà anche dall'implementazione finale del protocollo.
+
+### B. Invito di un pacchetto dati ad un altro nodo
+Sono stanco, come sempre
 
 # Discussione
 

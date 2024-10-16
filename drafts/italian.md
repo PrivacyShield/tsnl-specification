@@ -105,6 +105,8 @@ Va considerato il caso particolare in cui, per qualsiasi ragione, il nodo si con
 ### B. Invio di un pacchetto dati ad un altro nodo
 Ogni nodo ha una relativamente breve Coordinates Tables contenente le coordinate dei suoi vicini e i loro IP reali. Se a questo punto del docuemnto non è già stato notare, le coordinate nella tabella sono indicativi nella precisione: quanto basta per far raggiungere il dato a destinazione. Nel caso dei vicini della stessa micro regione le coordinate corrisponderanno effettivamente alle cordinate dei nodi, ma man man che il nodo è distante dal nodo comunicante, tenderà ad avere delle coordinate molto indicative e non precise. 
 
+##### Work in progress
+
 # Discussione
 
 ## Precisazioni
